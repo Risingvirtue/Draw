@@ -1,4 +1,4 @@
-====================
+
 Introduction
 ====================
 *Draw!* is a personal project on mine while trying to learn server.io. I initially started with p5, creating a rudamentary canvas with client communication on my local server. However, because I wanted to grow my project into a game, I decided to use the javascript canvas instead. Over the course of two weeks, I developed buttons for drawing tools, a chat messenger, and a pictionary game (with game timer, random words, and score keeping).
