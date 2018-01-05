@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- Arizonia -->
+		<link href='http://fonts.googleapis.com/css?family=Arizonia' rel='stylesheet' type='text/css'>
+		<!-- Font Awesome -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+		
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+		<link rel="stylesheet" type "text/css" href="./CSS/newMain.css">
+		
+	</head>
+	<body background="./img/wood.png">
+		<div class="container-fluid">
+			<p class="title unselectable">Draw!</p>
+			<div class="row text-center">
+				<div id="buttons" class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="margin-top: 10px; margin-right: 0px">
+					<div class="row text-center">
+						<label class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></label>
+						<button id="lgPen" class="pencilSize btn dot col-lg-2 col-md-2 col-sm-2 col-xs-2" onclick="switchPen(3)"><div class="lg circle"></div></button>
+						<button id="mdPen" class="pencilSize btn dot col-lg-2 col-md-2 col-sm-2 col-xs-2" onclick="switchPen(2)"><div class="md circle"></div></button>
+						<button id="smPen" class="pencilSize btn dot col-lg-2 col-md-2 col-sm-2 col-xs-2" onclick="switchPen(1)"><div class="sm circle"></div></button>
+						<button id="xsPen" class="pencilSize btn dot col-lg-2 col-md-2 col-sm-2 col-xs-2" onclick="switchPen(0)"><div class="xs circle"></div></button>
+						<button id="pencilButton" class="btn text-center col-lg-3 col-md-3 col-sm-3 col-xs-3"><i id="pencil" style="margin:auto"  class="fa fa-pencil" aria-hidden="true"></i></button>
+					</div>	
+					<div class="row text-center">
+						<label class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></label>
+						<button id="lgEraser" class="eraserSize btn dot col-lg-2 col-md-2 col-sm-2 col-xs-2" onclick="switchEraser(3)"><div class="lg circle blank"></div></button>
+						<button id="mdEraser" class="eraserSize btn dot col-lg-2 col-md-2 col-sm-2 col-xs-2" onclick="switchEraser(2)"><div class="md circle blank"></div></button>
+						<button id="smEraser" class="eraserSize btn dot col-lg-2 col-md-2 col-sm-2 col-xs-2" onclick="switchEraser(1)"><div class="sm circle blank"></div></button>
+						<button id="xsEraser" class="eraserSize btn dot col-lg-2 col-md-2 col-sm-2 col-xs-2" onclick="switchEraser(0)"><div class="xs circle blank"></div></button>
+						<button id="eraserButton" class="btn text-center col-lg-3 col-md-3 col-sm-3 col-xs-3"><i id="eraser" class="fa fa-eraser" style="margin:auto" aria-hidden="true"></i></button>
+					</div>
+					
+					<div class="row text-center">
+						<label class="col-lg-1 col-md-1 col-sm-1 col-xs-1"></label>
+						<button class="size btn dot col-lg-2 col-md-2 col-sm-2 col-xs-2" onclick="switchEraser(3)"><div class="lg circle blank"></div></button>
+						<button class="size btn dot col-lg-2 col-md-2 col-sm-2 col-xs-2" onclick="switchEraser(2)"><div class="md circle blank"></div></button>
+						<button class="size btn dot col-lg-2 col-md-2 col-sm-2 col-xs-2" onclick="switchEraser(1)"><div class="sm circle blank"></div></button>
+						<button class="size btn dot col-lg-2 col-md-2 col-sm-2 col-xs-2" onclick="switchEraser(0)"><div class="xs circle blank"></div></button>
+						<button class="btn col-lg-3 col-md-3 col-sm-3 col-xs-3" onclick="canvasClear()">
+							Clear!
+						</button>
+					</div>
+					
+					<button class='btn' onclick="initiateGame()">Start</button>
+					
+				</div>
+				<div id="canvasContainer" class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+					<div>
+						<div class="row text-center game">
+							<label class="col-lg-2 col-md-2 col-sm-2 col-xs-2"></label>
+							<div class="col-lg-8 col-md-8 col-sm-8 col-xs-8">
+								<label class="col-lg-3 col-md-3 col-sm-3 col-xs-3"></label>
+								<div class="well col-lg-6 col-md-6 col-sm-6 col-xs-6" style="margin-top: 15px">
+									<p id="word" style="font-size: 30px" class="unselectable">_ _ _ _</p>
+								</div>
+							</div>
+							<div class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="margin-top: 10px">
+								<button id="time" disabled class="vertical time unselectable">60</button>
+							</div>
+						</div>
+						<div class="row">
+						<canvas id="canvas" class="border unselectable"></canvas>
+						<canvas id="memCanvas" style="display: none"></canvas>
+						</div>
+					</div>
+					<div id="slidecontainer" class="row">
+					<input id="slider" type="range" min="0" max="305" value="155" class="slider" oninput="changeColor()">
+					<div style="margin-top: 10px">
+						<canvas id="colorCanvas"></canvas>
+					</div>
+					</div>
+				</div>
+				<div id="messenger" class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+					<div>
+						<textarea readonly class="border" id="text"></textarea>
+					</div>
+					<div style="margin:0px">
+						<textarea class="border" id="message" maxlength="50" type="text" style="overflow:hidden;"></textarea>					
+					</div>
+					<div id="names" style="margin-top: 10px; margin-left: 1px;">
+						<div id="row0" class="row botRow">
+							<p class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="margin:0px;">
+								<i id="icon0" class="" aria-hidden="true" style="pull-left"></i>
+							</p>
+							<div class="name col-lg-8 col-md-8 col-sm-8 col-xs-8">
+								<p class="textMargin" id="name0"></p>
+							</div>
+							<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 text-center" style="margin-left: -30px;" >
+								<p id="score0" class="textMargin score"></p>
+							</div>
+							<p class="corner">
+								<i id="pencil0" class="" aria-hidden="true" style="font-size: 14px"></i>
+							</p>
+							
+						</div>
+						<div id="row1" class="row botRow">
+							<p class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="margin:auto">
+								<i id="icon1" class="" aria-hidden="true"></i>
+							</p>
+							<div class="name col-lg-8 col-md-8 col-sm-8 col-xs-8">
+								<p class="textMargin" id="name1"></p>
+							</div>
+							<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 text-center" style="margin-left: -30px;" >
+								<p id="score1" class="textMargin score"></p>
+							</div>
+							<p class="corner">
+								<i id="pencil1" class="" aria-hidden="true" style="font-size: 14px"></i>
+							</p>
+						</div>
+						<div id="row2" class="row botRow">
+							<p class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="margin:auto">
+								<i id="icon2" class="" aria-hidden="true"></i>
+							</p>
+							<div class="name col-lg-8 col-md-8 col-sm-8 col-xs-8">
+								<p class="textMargin" id="name2"></p>
+							</div>
+							<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 text-center" style="margin-left: -30px;" >
+								<p id="score2" class="textMargin score"></p>
+							</div>
+							<p class="corner">
+								<i id="pencil2" class="" aria-hidden="true" style="font-size: 14px"></i>
+							</p>
+						</div>
+						<div id="row3" class="row botRow">
+							<p class="col-lg-2 col-md-2 col-sm-2 col-xs-2" style="margin:auto">
+								<i id="icon3" class="" aria-hidden="true"></i>
+							</p>
+							<div class="name col-lg-10 col-md-10 col-sm-10 col-xs-10">
+								<p class="textMargin" id="name3"></p>
+							</div>
+							<div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 text-center" style="margin-left: -30px;" >
+								<p id="score3" class="textMargin score" style="font-size: 14px"></p>
+							</div>
+							<p class="corner">
+								<i id="pencil3" class="" aria-hidden="true"></i>
+							</p>
+						</div>
+						<div id="row4" class="row">
+							<label class="col-lg-7 col-md-7 col-sm-7 col-xs-7"></label>
+							<p class="col-lg-2 col-md-2 col-sm-2 col-xs-2" onclick="up()">
+								<i id="up" class="fa fa-arrow-circle-o-up" aria-hidden="true"></i>
+							</p>
+							<p class="col-lg-2 col-md-2 col-sm-2 col-xs-2" onclick="down()">
+								<i id="down" class="fa fa-arrow-circle-o-down" aria-hidden="true"></i>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+			<a id="patchNotes" class="patch">Patch Notes</a>
+		</div>
+		
+		<div id="myModal" class="modal">
+			<div class="modal-content text-center">
+				<p>What is your name?</p>
+				<div><input maxlength="15" id="name" type="text" placeholder="e.g. Jellyfish" /></div>
+				<br>
+				<button style="margin: auto" onclick="join()">Join</button>
+			</div>
+		</div>
+		
+		
+		<div id="patch" class="modal">
+			<div class="modal-content" style="margin-top: 1%;">
+				<span class="close">&times;</span>
+			<p>	v1.0 <br>
+				-Added a round system <br>
+				-Increased the size of the word bank<br>
+				v0.6 <br>
+				-Added a score system <br>
+				-Implemented delay and game continuation <br>
+				v0.5.1 <br>
+				-Added functionality to guessing <br>
+				-Added non functional score and pen for current player <br>
+				-Internal reorganization <br>
+				v0.5 <br>
+				-Fixed bug where mouse drag would not change color palette <br>
+				-Added wells and timer <br>
+				-Added name on wood <br>
+				-Added shadow <br>
+				v0.4.2.1 <br>
+				-Centered clear button <br>
+				-Created gradient for textboxes <br>
+				v0.4.2 <br>
+				-Added background and gradient <br>
+				-Added box-shadow <br>
+				v0.4.1<br>
+				-Fixed bug where chat does not scroll upwards<br>
+				-Internal reformatting of code<br>
+				v0.4<br>
+				-Added Player List<br>
+				-Fixed bug where color selection would not align with mouse cursor properly<br>
+				-Removed background color formatting<br>
+				-Added a feature where your own name goes on top of player list<br>
+				v0.3<br>
+				-Added color rectangle selection<br>
+				-Revamped entire formatting<br>
+				-Centered slider with canvas<br>
+				-Fixed bug where selecting canvas would turn it blue<br>
+				v0.2<br>
+				-Added chatbox<br>
+				-Created color slider<br>
+				-Added size selection for both eraser and pen<br>
+				-Added a join feature to associate names with sockets<br>
+				v0.1<br>
+				-Added selection for eraser and pen<br>
+				v0.0<br>
+				-Created canvas<br>
+				-Can draw</p>
+			</div>
+		</div>
+		
+			<script src="./draw/buttons.js"></script>
+			<script src="./message/resize.js"></script>
+			<script src="./message/icon.js"></script>
+			<script src="./draw/newSketch.js"></script>
+			<script src="./draw/color.js"></script>
+			<script src="./draw/newColorCanvas.js"></script>
+			<script src="./message/messageBox.js"></script>
+			<script src="./game/game.js"></script>
+	
+		
+	</body>
+</html>
